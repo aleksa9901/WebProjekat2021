@@ -1,0 +1,72 @@
+.formaTables
+{
+    
+    display:flex;
+    flex-direction: column;
+}
+.unutrasnjiDiv
+{
+    margin:5px
+
+}
+.mainContainer
+{
+    border:  1px solid black;
+    display: flex;
+    flex-direction: row;
+    
+}
+.XY
+{
+    display:flex;
+    flex-direction: row;
+}
+.xDiv
+{
+    margin-right:5px;
+}
+.yDiv
+{
+    margin-left:5px;
+}
+.red
+{
+    display:flex;
+    flex-grow:1;
+}
+.kontStolovi
+{
+    display:flex;
+    flex-grow:1;
+    flex-direction: column;
+}
+.table
+{
+    display:flex;
+    flex-direction: column;
+    border: 1px solid black;
+    flex: 1 1 20px;
+    margin: 5px;
+    text-align: center;
+}
+.tableDugme
+{
+    display:flex;
+    justify-content: space-around;
+}
+.Sutnuto
+{
+    border:  1px solid black;
+    display:flex;
+    flex-direction:column;
+}
+.Naslov
+{
+    margin:1px;
+}
+.divUnos
+{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+}

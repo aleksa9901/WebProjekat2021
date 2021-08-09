@@ -10,10 +10,10 @@
         this.tables = [];
         this.games = [];
         this.container = null;
-        this.dodajGame(new BoardGame("Darkest Dungeon", 5,"Strategija"));
-        this.dodajGame(new BoardGame("Darkest Days", 5,"Strategija"));
-        this.dodajGame(new BoardGame("Betreyal at house on the hill", 5,"Strategija"));
-        this.dodajGame(new BoardGame("Splendor", 5,"Strategija"));
+        //this.dodajGame(new BoardGame("Darkest Dungeon", 5,"Strategija"));
+        //this.dodajGame(new BoardGame("Darkest Days", 5,"Strategija"));
+        //this.dodajGame(new BoardGame("Betreyal at house on the hill", 5,"Strategija"));
+        //this.dodajGame(new BoardGame("Splendor", 5,"Strategija"));
     }
 
     dodajSto(table)
@@ -24,6 +24,47 @@
     dodajGame(game)
     {
         this.games.push(game);
+        this.updateSelekcije();
+        
+    }
+    ukloniIgru(Naziv)
+    {
+        var igra = this.games.find(element => element.naziv==Naziv)
+        igra.izbrisiIgru();
+        this.games=this.games.filter(el =>{ 
+            return el.naziv != Naziv}
+        );
+        console.log(this.games);
+        this.updateSelekcije();
+    }
+
+    updateSelekcije()
+    {
+        let selekcija = this.container.querySelector(".listaIgrica");
+        var length = selekcija.options.length - 1;
+        for(let i = length; i >= 0; i--)
+        {
+            selekcija.remove(i);
+        }
+        let opcija = null;
+        this.games.forEach((game,index)=>{
+            opcija = document.createElement("option");
+            opcija.innerHTML = game.naziv;
+            opcija.value = game.naziv;
+            selekcija.appendChild(opcija);
+        });
+        selekcija = document.body.querySelector(".boardGameSelectList");
+        var length = selekcija.options.length - 1;
+        for(let i = length; i >= 0; i--)
+        {
+            selekcija.remove(i);
+        }
+        this.games.forEach((game,index)=>{
+            opcija = document.createElement("option");
+            opcija.innerHTML = game.naziv;
+            opcija.value = game.naziv;
+            selekcija.appendChild(opcija);
+        });
     }
 
     crtajIgraonicu(host)
@@ -42,9 +83,24 @@
         var sutniDole = document.createElement("div");
         sutniDole.classList.add("Sutnuto");
         host.appendChild(sutniDole);
+
+        var sveIgre = document.createElement("div");
+        sveIgre.className="divSveIgre";
+        host.appendChild(sveIgre);
+
         this.crtajFormuIgre(sutniDole);
+        this.crtajSveIgre(sveIgre);
 
 
+    }
+    crtajSveIgre(host)
+    {
+        let div = document.createElement("div");
+        div.style.width = "100%";
+        let elLabel = document.createElement("h3");
+        elLabel.innerHTML = "SVE IGRE: "
+        div.appendChild(elLabel);
+        host.appendChild(div);
     }
 
     crtajFormuTables(host)
@@ -141,15 +197,18 @@
 
             const result = this.games.find(element => element.naziv==igra);
             const maxIgraca = parseInt(result.brojIgraca);
-            console.log(maxIgraca);
+            const bojaPicker = result.tip;
+            console.log("Boja je: " + result);
             let x = parseInt(selX.value);
             let y = parseInt(selY.value);
 
-            let potencijalniSto = this.tables.find(sto=> sto.igra == igra && sto.brojIgraca + igraci <= result.brojIgraca && (sto.i != x || sto.j != y));
-            if(potencijalniSto)
-            alert("NAPUNJEN STO FUCK OFF");
+            //let potencijalniSto = this.tables.find(sto=> sto.igra == igra && sto.brojIgraca + igraci <= result.brojIgraca && (sto.i != x || sto.j != y));
+            if (Number.isNaN(igraci))
+            alert("Unesite broj igraca");
+            //else if(potencijalniSto)
+            //alert("NAPUNJEN STO FUCK OFF");
             else
-                this.tables[x*this.n+y].azurirajSto(igra,igraci,maxIgraca);
+                this.tables[x*this.n+y].azurirajSto(igra,igraci,maxIgraca,bojaPicker);
         }
         
     }
@@ -162,7 +221,6 @@
         host.appendChild(kontStolovi);
         let red;
         let sto;
-        let lok;
         for(let i=0; i<this.m;i++)
         {
             red = document.createElement("div");
@@ -190,6 +248,13 @@
 
         var divUnos = document.createElement("div");
         divUnos.className = "divUnos";
+        divNaziv = document.createElement("div");
+        elLabel = document.createElement("h4");
+        elLabel.innerHTML = "Unos Igre: ";
+        elLabel.className = "Naslov";
+        divNaziv.appendChild(elLabel);
+        divUnos.appendChild(divNaziv);
+
         //Unos naziv
         var divNaziv = document.createElement("div");
         divNaziv.className = "divNaziv";
@@ -213,17 +278,103 @@
         divNaziv.appendChild(unos);
         divUnos.appendChild(divNaziv);
 
+
+        //unos tip igre
         divNaziv = document.createElement("div");
         divNaziv.className = "divBoardGameType";
         elLabel = document.createElement("label");
         elLabel.innerHTML = "Tip igre: ";
-        unos = document.createElement("input");
+        unos = document.createElement("select");
         unos.className = "boardGameType";
+        var Tipovi = ["Horror","Akcija","Triller","Komedija","Dexterity"];
+        var opcija = null;
+        Tipovi.forEach((game,index)=>{
+            opcija = document.createElement("option");
+            opcija.innerHTML = game;
+            opcija.value = game;
+            unos.appendChild(opcija);
+        });
+        
         divNaziv.appendChild(elLabel);
         divNaziv.appendChild(unos);
         divUnos.appendChild(divNaziv);
 
+        //dugme
+        divNaziv = document.createElement("div");
+        divNaziv.className="divBoardGameButton";
+        let dugmeDodaj = document.createElement("button");
+        dugmeDodaj.innerHTML = "Dodaj igru";
+        divNaziv.appendChild(dugmeDodaj);
+        divUnos.appendChild(divNaziv);
+
+       
         formIgra.appendChild(divUnos);
+
+        //forma za brisanje igre
+
+        //selekcija igre
+        divUnos = document.createElement("div");
+        divUnos.className = "BrisanjeIgre";
+        divNaziv = document.createElement("div");
+        divNaziv.className = "divBoardGameSelect";
+        unos = document.createElement("select");
+        unos.className = "boardGameSelectList";
+        let opcije = null;
+        this.games.forEach((game,index)=>{
+            opcije = document.createElement("option");
+            opcije.innerHTML = game.naziv;
+            opcije.value = game.naziv;
+            unos.appendChild(opcije);
+        })
+        elLabel = document.createElement("label");
+        elLabel.innerHTML = "Izaberite Igru: ";
+        divNaziv.appendChild(elLabel);
+        divNaziv.appendChild(unos);
+        divUnos.appendChild(divNaziv);
+
+        divNaziv = document.createElement("div");
+        divNaziv.className = "divBrisanjeButton";
+        let dugmeBrisanje = document.createElement("button");
+        dugmeBrisanje.innerHTML = "Ukloni Igru";
+        divNaziv.appendChild(dugmeBrisanje);
+        divUnos.appendChild(divNaziv);
+
+        formIgra.appendChild(divUnos);
+
+
+
+        dugmeDodaj.onclick=(ev)=>
+        {
+            const BoardGameNaziv = host.querySelector(".boardNaziv").value;
+            const BoardGameBrojIgraca = parseInt(host.querySelector(".boardGameBrojIgraca").value);
+            const BoardGameTipIgre = host.querySelector(".boardGameType").value;
+            if(BoardGameNaziv.trim().length == 0 || Number.isNaN(BoardGameBrojIgraca))
+            {
+                alert("Greska");
+            }
+            else
+            {
+            let drustvenaIgra = new BoardGame(BoardGameNaziv,BoardGameBrojIgraca,BoardGameTipIgre);
+            var postoji = this.games.find((name) => name.naziv== drustvenaIgra.naziv);
+            if(!postoji)
+            {
+                let crtaj = document.querySelector(".divSveIgre");
+                drustvenaIgra.crtajIgru(crtaj);
+                this.dodajGame(drustvenaIgra);
+            }
+            else
+            {
+                alert("postoji Igra");
+            }
+            }
+            //console.log(this.games);
+        };
+        dugmeBrisanje.onclick=(ev)=>
+        {
+            const BoardGameNaziv =  host.querySelector(".boardGameSelectList").value;
+            console.log(BoardGameNaziv);
+            this.ukloniIgru(BoardGameNaziv);
+        }
 
     }
 

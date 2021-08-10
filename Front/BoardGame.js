@@ -2,6 +2,7 @@ export class BoardGame
 {
     constructor(naziv,brojIgraca,tip)
     {
+        this.ID = 0;
         this.naziv = naziv;
         this.brojIgraca = brojIgraca;
         this.tip = tip;

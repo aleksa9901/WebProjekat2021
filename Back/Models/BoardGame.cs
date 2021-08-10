@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Back.Models
 {
@@ -18,6 +19,8 @@ namespace Back.Models
         [MaxLength(255)]
         public string Tip { get; set; }
         [Column("PlayingPlace")]
+
+        [JsonIgnore]
         public Igraonica PlayingPlace {get;set;}
     }
 }

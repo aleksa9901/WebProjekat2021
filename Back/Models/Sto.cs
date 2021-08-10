@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Back.Models
 {   
@@ -16,6 +17,8 @@ namespace Back.Models
         [Column("J")]
         public int J {get;set;}
         [Column("Igra")]
+        
+        
         public BoardGame Igra { get; set; }
 
         [Column("BrojIgraca")]
@@ -27,6 +30,7 @@ namespace Back.Models
         public string Boja { get; set; }
 
         [Column("PlayingPlace")]
+        [JsonIgnore]
         public Igraonica PlayingPlace {get;set;}
 
 

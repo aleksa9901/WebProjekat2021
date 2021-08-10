@@ -2,7 +2,7 @@
  import { Table } from "./Table.js";
  export class Igraonica
  {
-    constructor(naziv, n, m)
+    constructor(id,naziv, n, m)
     {
         this.naziv = naziv;
         this.n = n;
@@ -10,6 +10,7 @@
         this.tables = [];
         this.games = [];
         this.container = null;
+        this.id = id;
         //this.dodajGame(new BoardGame("Darkest Dungeon", 5,"Strategija"));
         //this.dodajGame(new BoardGame("Darkest Days", 5,"Strategija"));
         //this.dodajGame(new BoardGame("Betreyal at house on the hill", 5,"Strategija"));
@@ -24,6 +25,8 @@
     dodajGame(game)
     {
         this.games.push(game);
+        let crtaj = document.querySelector(".divSveIgre");
+        game.crtajIgru(crtaj);
         this.updateSelekcije();
         
     }
@@ -208,7 +211,7 @@
             //else if(potencijalniSto)
             //alert("NAPUNJEN STO FUCK OFF");
             else
-                this.tables[x*this.n+y].azurirajSto(igra,igraci,maxIgraca,bojaPicker);
+                this.tables[x*this.n+y].popuniSto(igra,igraci,maxIgraca,bojaPicker);
         }
         
     }
@@ -358,8 +361,7 @@
             var postoji = this.games.find((name) => name.naziv== drustvenaIgra.naziv);
             if(!postoji)
             {
-                let crtaj = document.querySelector(".divSveIgre");
-                drustvenaIgra.crtajIgru(crtaj);
+                
                 this.dodajGame(drustvenaIgra);
             }
             else

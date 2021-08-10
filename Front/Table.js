@@ -2,6 +2,7 @@ export class Table
 {
     constructor(i,j,igra, brojIgraca, maxBrojIgraca, boja)
     {
+        this.ID = 0;
         this.i = i;
         this.j = j;
         this.igra = igra;
@@ -39,7 +40,7 @@ export class Table
         host.appendChild(this.container);
     } 
 
-    azurirajSto(naziv,brojIgraca,maxBrojIgraca,boja)
+    popuniSto(naziv,brojIgraca,maxBrojIgraca,boja)
     {
         let slovo = "A";
         let broj = this.j+1;
@@ -51,6 +52,23 @@ export class Table
         {
             this.igra = naziv;
             this.boja = boja;
+            this.brojIgraca += brojIgraca;
+            this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
+            this.container.style.backgroundColor = this.vratiBoji();
+            this.buttonsAdd(this.container);
+        }
+    }
+
+
+    azurirajSto(brojIgraca)
+    {
+        let slovo = "A";
+        let broj = this.j+1;
+        //console.log(this.brojIgraca);
+        if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
+            alert("Previse Ljudi");
+        else
+        {
             this.brojIgraca += brojIgraca;
             this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
             this.container.style.backgroundColor = this.vratiBoji();
@@ -90,7 +108,7 @@ export class Table
         dugmeAzuriraj.onclick = (ev)=>
         {
             var broj = parseInt(prompt("Koliko novih igraca? (moze negativan broj za oduzimanje)"));
-            this.azurirajSto(this.igra,broj,this.maxBrojIgraca);
+            this.azurirajSto(broj);
 
         }
 

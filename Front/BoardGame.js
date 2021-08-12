@@ -10,7 +10,7 @@ export class BoardGame
     }
     odrediBoju()
     {
-        console.log(this.tip);
+        //console.log(this.tip);
         if(!this.tip)
         return "green";
         else if(this.tip == "Dexterity")
@@ -36,7 +36,16 @@ export class BoardGame
 
     izbrisiIgru()
     {
-        var parent = this.container.parentNode;
-        parent.removeChild(this.container);
+        fetch("https://localhost:5001/Igraonica/IzbrisiIgru/" + this.ID,{method:"DELETE"}).then(resp => {
+            if(resp.ok)
+            {   
+                var parent = this.container.parentNode;
+                parent.removeChild(this.container);
+            }
+            else if(resp.status == 400)
+            {
+                alert("Greska prilikom brisanja igre");
+            }
+        });
     }
 }

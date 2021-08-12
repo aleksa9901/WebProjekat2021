@@ -10,10 +10,12 @@ export class Table
         this.maxBrojIgraca = maxBrojIgraca;
         this.boja = boja;
         this.container = null;
+        this.idIgre = 0;
+        this.idIgraonice = 0
     }
     vratiBoji()
     {
-        console.log(this.boja);
+        //console.log(this.boja);
         if(!this.boja)
         return "green";
         else if(this.boja == "Dexterity")
@@ -40,8 +42,9 @@ export class Table
         host.appendChild(this.container);
     } 
 
-    popuniSto(naziv,brojIgraca,maxBrojIgraca,boja)
+    popuniSto(naziv,brojIgraca,maxBrojIgraca,boja,idigre)
     {
+        
         let slovo = "A";
         let broj = this.j+1;
         this.maxBrojIgraca = maxBrojIgraca;
@@ -50,6 +53,62 @@ export class Table
             alert("BOI FUCK OFF");
         else
         {
+            this.idIgre = idigre;
+            this.igra = naziv; 
+            this.boja = boja;
+            this.brojIgraca += brojIgraca;
+            this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
+            this.container.style.backgroundColor = this.vratiBoji();
+            this.buttonsAdd(this.container);
+        }
+    }
+
+    dodajSto(naziv,brojIgraca,maxBrojIgraca,boja,idigre,idIgraonice)
+    {
+        console.log(boja);
+        fetch("https://localhost:5001/Igraonica/DodajSto/" + idigre +"/"+ idIgraonice,{method:"POST",
+    
+        headers:{
+            "Content-Type" : "application/json" 
+        },
+        body:JSON.stringify({
+            i : this.i,
+            j : this.j,
+            brojIgraca : brojIgraca,
+            maxBrojIgraca : maxBrojIgraca,
+            boja : boja
+        })}).then(resp => {
+            if(resp.ok)
+            {   
+                resp.json().then(val=>{
+                    this.ID = val.id;
+                })
+                let slovo = "A";
+                let broj = this.j+1;
+                this.maxBrojIgraca = maxBrojIgraca;
+                //console.log(this.brojIgraca);
+                this.idIgre = idigre;
+                this.igra = naziv;
+                this.boja = boja;
+                this.brojIgraca += brojIgraca;
+                this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
+                this.container.style.backgroundColor = this.vratiBoji();
+                this.buttonsAdd(this.container);
+            }
+            else if(resp.status == 400)
+            {
+                alert("Greska prilikom dodavanje igre");
+            }
+        });
+        let slovo = "A";
+        let broj = this.j+1;
+        this.maxBrojIgraca = maxBrojIgraca;
+        //console.log(this.brojIgraca);
+        if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
+            alert("BOI FUCK OFF");
+        else
+        {
+            this.idIgre = idigre;
             this.igra = naziv;
             this.boja = boja;
             this.brojIgraca += brojIgraca;
@@ -60,33 +119,63 @@ export class Table
     }
 
 
-    azurirajSto(brojIgraca)
+    azurirajSto(brojI)
     {
         let slovo = "A";
         let broj = this.j+1;
         //console.log(this.brojIgraca);
-        if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
+        if(brojI + this.brojIgraca > this.maxBrojIgraca)
             alert("Previse Ljudi");
         else
         {
-            this.brojIgraca += brojIgraca;
-            this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
-            this.container.style.backgroundColor = this.vratiBoji();
-            this.buttonsAdd(this.container);
+            fetch("https://localhost:5001/Igraonica/IzmeniSto/",{method:"PUT",headers:{
+            "Content-Type" : "application/json"
+        },
+        body:JSON.stringify({
+            id: this.ID,
+            i : this.i,
+            j : this.j,
+            brojIgraca : brojI + this.brojIgraca,
+            maxBrojIgraca : this.maxBrojIgraca,
+            boja : this.boja
+        })}).then(resp => {
+            if(resp.ok)
+            {   
+                this.brojIgraca += brojI;
+                this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
+                this.container.style.backgroundColor = this.vratiBoji();
+                this.buttonsAdd(this.container);
+            }
+            else if(resp.status == 400)
+            {
+                alert("Greska prilikom menjanje stola");
+            }
+        });
         }
     }
 
     isprazniSto()
     {
-        let slovo = "A";
-        let broj = this.j+1;
-        this.maxBrojIgraca = 0;
-        this.igra = "";
-        this.brojIgraca = 0;
-        this.boja = "";
-        this.container.innerHTML=slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br> Prazno, " + this.brojIgraca;
-        this.container.style.backgroundColor = this.vratiBoji();
-        this.buttonsAdd(this.container);
+        fetch("https://localhost:5001/Igraonica/IzbrisiSto/" + this.ID,{method:"DELETE"}).then(resp => {
+            if(resp.ok)
+            {   
+                let slovo = "A";
+                let broj = this.j+1;
+                this.maxBrojIgraca = 0;
+                this.igra = "";
+                this.brojIgraca = 0;
+                this.boja = "";
+                this.parent.updateSelekcije();
+                this.container.innerHTML=slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br> Prazno, " + this.brojIgraca;
+                this.container.style.backgroundColor = this.vratiBoji();
+                this.buttonsAdd(this.container);
+            }
+            else if(resp.status == 400)
+            {
+                alert("Greska prilikom brisanja stola");
+            }
+        });
+        
     }
     
     buttonsAdd(host)

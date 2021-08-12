@@ -22,12 +22,11 @@ namespace Back.Controllers
         [Route("DodajIgraonicu")]
         [HttpPost]
 
-        public async Task<int> DodajIgraonicu(Igraonica playingPlace)
+        public async Task<IActionResult> DodajIgraonicu(Igraonica playingPlace)
         {
             Context.Igraonice.Add(playingPlace);
              await Context.SaveChangesAsync();
-             int id = playingPlace.ID;
-             return id;
+             return Ok(new {ID = playingPlace.ID});
         }
 
         [Route("PreuzmiIgraonice")]
@@ -50,20 +49,19 @@ namespace Back.Controllers
         [Route("DodajIgru/{id}")]
         [HttpPost]
 
-        public async Task<int> DodajIgru(int id,[FromBody] BoardGame igra)
+        public async Task<IActionResult> DodajIgru(int id,[FromBody] BoardGame igra)
         {
             var cale = await Context.Igraonice.FindAsync(id);
             igra.PlayingPlace = cale;
             Context.Igrice.Add(igra);
             await Context.SaveChangesAsync();
-            int idkrajnji = igra.ID;
-            return idkrajnji;
+            return Ok(new {ID = igra.ID});
         }
 
         [Route("DodajSto/{idIgre}/{idIgraonice}")]
         [HttpPost]
 
-        public async Task<int> DodajSto(int idIgre, int idIgraonice,[FromBody] Sto table)
+        public async Task<IActionResult> DodajSto(int idIgre, int idIgraonice,[FromBody] Sto table)
         {
             var igra = await Context.Igrice.FindAsync(idIgre);
             var igraonice = await Context.Igraonice.FindAsync(idIgraonice);
@@ -71,8 +69,7 @@ namespace Back.Controllers
             table.Igra = igra;
             Context.Stolovi.Add(table);
             await Context.SaveChangesAsync();
-            int id = table.ID;
-            return id;
+            return Ok(new {ID = table.ID});
         }
 
         [Route("IzmeniSto")]

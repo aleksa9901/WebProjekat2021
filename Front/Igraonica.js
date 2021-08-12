@@ -19,16 +19,55 @@
 
     dodajSto(table)
     {
+        table.parent = this;
         this.tables.push(table);
     }
 
     dodajGame(game)
     {
+        let find = this.games.find(element => element.naziv==game.naziv);
+        if(!find)
+        {
+        fetch("https://localhost:5001/Igraonica/DodajIgru/" + this.id,{method:"POST",
+    
+        headers:{
+            "Content-Type" : "application/json" 
+        },
+        body:JSON.stringify({
+            naziv : game.naziv,
+            brojIgraca : game.brojIgraca,
+            tip : game.tip
+        })}).then(resp => {
+            if(resp.ok)
+            {   
+                resp.json().then(val=>{
+                    game.id = val.ID;
+                })
+                game.parent = this;
+                this.games.push(game);
+                let crtaj = document.querySelector(".divSveIgre");
+                game.crtajIgru(crtaj);
+                this.updateSelekcije();
+            }
+            else if(resp.status == 400)
+            {
+                alert("Greska prilikom dodavanje igre");
+            }
+        });
+    }
+    else
+    {
+        alert("Postoji Ta Igra");
+    }
+        
+        
+    }
+    novaIgra(game)
+    {
         this.games.push(game);
         let crtaj = document.querySelector(".divSveIgre");
         game.crtajIgru(crtaj);
         this.updateSelekcije();
-        
     }
     ukloniIgru(Naziv)
     {
@@ -37,7 +76,7 @@
         this.games=this.games.filter(el =>{ 
             return el.naziv != Naziv}
         );
-        console.log(this.games);
+        //console.log(this.games);
         this.updateSelekcije();
     }
 
@@ -50,7 +89,21 @@
             selekcija.remove(i);
         }
         let opcija = null;
-        this.games.forEach((game,index)=>{
+        let slobodneigre = []
+        this.games.forEach(game =>{
+            slobodneigre.push(game);
+        });
+
+        for(let j = 0; j < this.tables.length; j++)
+        {
+            slobodneigre = slobodneigre.filter(el =>
+            {
+                return el.naziv != this.tables[j].igra;
+                
+            });
+        }
+
+        slobodneigre.forEach((game,index)=>{
             opcija = document.createElement("option");
             opcija.innerHTML = game.naziv;
             opcija.value = game.naziv;
@@ -62,7 +115,7 @@
         {
             selekcija.remove(i);
         }
-        this.games.forEach((game,index)=>{
+        slobodneigre.forEach((game,index)=>{
             opcija = document.createElement("option");
             opcija.innerHTML = game.naziv;
             opcija.value = game.naziv;
@@ -201,7 +254,8 @@
             const result = this.games.find(element => element.naziv==igra);
             const maxIgraca = parseInt(result.brojIgraca);
             const bojaPicker = result.tip;
-            console.log("Boja je: " + result);
+            const idIgre = result.ID;
+            //("Boja je: " + result);
             let x = parseInt(selX.value);
             let y = parseInt(selY.value);
 
@@ -211,7 +265,11 @@
             //else if(potencijalniSto)
             //alert("NAPUNJEN STO FUCK OFF");
             else
-                this.tables[x*this.n+y].popuniSto(igra,igraci,maxIgraca,bojaPicker);
+            {
+                this.tables[x*this.n+y].dodajSto(igra,igraci,maxIgraca,bojaPicker,idIgre,this.id);
+                this.updateSelekcije();
+            }
+
         }
         
     }
@@ -374,7 +432,7 @@
         dugmeBrisanje.onclick=(ev)=>
         {
             const BoardGameNaziv =  host.querySelector(".boardGameSelectList").value;
-            console.log(BoardGameNaziv);
+            //console.log(BoardGameNaziv);
             this.ukloniIgru(BoardGameNaziv);
         }
 

@@ -13,12 +13,15 @@ fetch("https://localhost:5001/Igraonica/PreuzmiIgraonice").then(p => {
                 igraonica.igre.forEach( novaIgra => {
                     let Igra = new BoardGame(novaIgra.naziv,novaIgra.brojIgraca,novaIgra.tip);
                     Igra.ID = novaIgra.id;
-                    igraonica1.dodajGame(Igra);
+                    igraonica1.novaIgra(Igra);
                 });
                 igraonica.stolovi.forEach(noviStolovi=>
                     {
-                        igraonica1.tables[noviStolovi.i*igraonica1.n+noviStolovi.j].popuniSto(noviStolovi.igra.naziv,noviStolovi.brojIgraca,noviStolovi.maxIgraca,noviStolovi.boja)
+                        igraonica1.tables[noviStolovi.i*igraonica1.n+noviStolovi.j].popuniSto(noviStolovi.igra.naziv,noviStolovi.brojIgraca,noviStolovi.maxBrojIgraca,noviStolovi.boja,noviStolovi.igra.id)
+                        igraonica1.tables[noviStolovi.i*igraonica1.n+noviStolovi.j].ID = noviStolovi.id;
+                        
                     });
+                    igraonica1.updateSelekcije();
                     
             });
     });

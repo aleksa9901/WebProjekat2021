@@ -7,7 +7,7 @@ fetch("https://localhost:5001/Igraonica/PreuzmiIgraonice").then(p => {
     p.json().then(data=> {
         data.forEach(igraonica =>
             {
-                console.log(igraonica);
+                //console.log(igraonica);
                 let igraonica1 = new Igraonica(igraonica.id,igraonica.naziv,igraonica.n,igraonica.m);
                 igraonica1.crtajIgraonicu(document.body);
                 igraonica.igre.forEach( novaIgra => {

@@ -38,7 +38,6 @@ export class Table
         this.container.className="table";
         this.container.innerHTML=slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br> Prazno, " + this.brojIgraca;
         this.container.style.backgroundColor = this.vratiBoji();
-        this.buttonsAdd(this.container);
         host.appendChild(this.container);
     } 
 
@@ -50,7 +49,7 @@ export class Table
         this.maxBrojIgraca = maxBrojIgraca;
         //console.log(this.brojIgraca);
         if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
-            alert("BOI FUCK OFF");
+            alert("Previse Igraca");
         else
         {
             this.idIgre = idigre;
@@ -65,7 +64,7 @@ export class Table
 
     dodajSto(naziv,brojIgraca,maxBrojIgraca,boja,idigre,idIgraonice)
     {
-        console.log(boja);
+        //console.log(boja);
         fetch("https://localhost:5001/Igraonica/DodajSto/" + idigre +"/"+ idIgraonice,{method:"POST",
     
         headers:{
@@ -105,7 +104,7 @@ export class Table
         this.maxBrojIgraca = maxBrojIgraca;
         //console.log(this.brojIgraca);
         if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
-            alert("BOI FUCK OFF");
+            alert("Previse ljudi");
         else
         {
             this.idIgre = idigre;

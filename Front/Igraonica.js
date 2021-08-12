@@ -259,11 +259,11 @@
             let x = parseInt(selX.value);
             let y = parseInt(selY.value);
 
-            //let potencijalniSto = this.tables.find(sto=> sto.igra == igra && sto.brojIgraca + igraci <= result.brojIgraca && (sto.i != x || sto.j != y));
+            let potencijalniSto = this.tables.find(sto=> sto.igra == igra && sto.brojIgraca + igraci <= result.brojIgraca && (sto.i != x || sto.j != y));
             if (Number.isNaN(igraci))
             alert("Unesite broj igraca");
-            //else if(potencijalniSto)
-            //alert("NAPUNJEN STO FUCK OFF");
+            else if(potencijalniSto)
+            alert("Na ovom stolu ima previse igraca");
             else
             {
                 this.tables[x*this.n+y].dodajSto(igra,igraci,maxIgraca,bojaPicker,idIgre,this.id);

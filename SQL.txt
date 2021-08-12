@@ -1,0 +1,3 @@
+insert into [IgraonicaDB].[dbo].[Igraonica] (Naziv,M,N) values ('Goblin',5,5)
+
+insert into [IgraonicaDB].[dbo].[Igraonica] (Naziv,M,N) values ('Pirates',3,5)

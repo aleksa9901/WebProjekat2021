@@ -167,7 +167,7 @@ export class Table
                 this.parent.updateSelekcije();
                 this.container.innerHTML=slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br> Prazno, " + this.brojIgraca;
                 this.container.style.backgroundColor = this.vratiBoji();
-                this.buttonsAdd(this.container);
+                //this.buttonsAdd(this.container);
             }
             else if(resp.status == 400)
             {

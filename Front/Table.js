@@ -62,59 +62,60 @@ export class Table
         }
     }
 
-    dodajSto(naziv,brojIgraca,maxBrojIgraca,boja,idigre,idIgraonice)
-    {
+        dodajSto(naziv, brojIgraca, maxBrojIgraca, boja, idigre, idIgraonice) {
         //console.log(boja);
-        fetch("https://localhost:5001/Igraonica/DodajSto/" + idigre +"/"+ idIgraonice,{method:"POST",
-    
-        headers:{
-            "Content-Type" : "application/json" 
-        },
-        body:JSON.stringify({
-            i : this.i,
-            j : this.j,
-            brojIgraca : brojIgraca,
-            maxBrojIgraca : maxBrojIgraca,
-            boja : boja
-        })}).then(resp => {
-            if(resp.ok)
-            {   
-                resp.json().then(val=>{
-                    this.ID = val.id;
-                })
-                let slovo = "A";
-                let broj = this.j+1;
-                this.maxBrojIgraca = maxBrojIgraca;
-                //console.log(this.brojIgraca);
-                this.idIgre = idigre;
-                this.igra = naziv;
-                this.boja = boja;
-                this.brojIgraca += brojIgraca;
-                this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
-                this.container.style.backgroundColor = this.vratiBoji();
-                this.buttonsAdd(this.container);
-            }
-            else if(resp.status == 400)
-            {
-                alert("Greska prilikom dodavanje igre");
-            }
-        });
+
         let slovo = "A";
-        let broj = this.j+1;
+        let broj = this.j + 1;
         this.maxBrojIgraca = maxBrojIgraca;
         //console.log(this.brojIgraca);
-        if(brojIgraca + this.brojIgraca > this.maxBrojIgraca)
+        if (brojIgraca + this.brojIgraca > this.maxBrojIgraca)
             alert("Previse ljudi");
-        else
-        {
+        else {
             this.idIgre = idigre;
             this.igra = naziv;
             this.boja = boja;
             this.brojIgraca += brojIgraca;
-            this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra+ ", " + this.brojIgraca;
+            this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra + ", " + this.brojIgraca;
             this.container.style.backgroundColor = this.vratiBoji();
             this.buttonsAdd(this.container);
+
+            fetch("https://localhost:5001/Igraonica/DodajSto/" + idigre + "/" + idIgraonice, {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    i: this.i,
+                    j: this.j,
+                    brojIgraca: brojIgraca,
+                    maxBrojIgraca: maxBrojIgraca,
+                    boja: boja
+                })
+            }).then(resp => {
+                if (resp.ok) {
+                    resp.json().then(val => {
+                        this.ID = val.id;
+                    })
+                    let slovo = "A";
+                    let broj = this.j + 1;
+                    this.maxBrojIgraca = maxBrojIgraca;
+                    //console.log(this.brojIgraca);
+                    this.idIgre = idigre;
+                    this.igra = naziv;
+                    this.boja = boja;
+                    this.brojIgraca += brojIgraca;
+                    this.container.innerHTML = slovo.substring(0, slovo.length - 1) + String.fromCharCode(slovo.charCodeAt(slovo.length - 1) + this.i) + ", " + broj + "<br>" + this.igra + ", " + this.brojIgraca;
+                    this.container.style.backgroundColor = this.vratiBoji();
+                    this.buttonsAdd(this.container);
+                }
+                else if (resp.status == 400) {
+                    alert("Greska prilikom dodavanje igre");
+                }
+            });
         }
+
     }
 
 

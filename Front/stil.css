@@ -13,9 +13,7 @@
 {
     border:  1px solid black;
     display: flex;
-    flex-direction: column;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    flex-direction: row;
     
 }
 .XY
@@ -73,8 +71,6 @@
     justify-content:space-evenly;
     border-bottom: 1px solid black;
     padding: 5px;
-    flex-wrap:wrap;
-    align-content: space-between;
 }
 .BrisanjeIgre
 {
@@ -97,12 +93,4 @@
     display: flex;
     flex-wrap: wrap;
 
-}
-.formaTables
-{
-    display: flex;
-}
-h2
-{
-    text-align: center;
 }

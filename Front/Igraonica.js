@@ -65,7 +65,8 @@
     novaIgra(game)
     {
         this.games.push(game);
-        let crtaj = document.querySelector(".divSveIgre");
+        let crtaj = this.container.querySelector(".divSveIgre");
+        console.log(crtaj);
         game.crtajIgru(crtaj);
         this.updateSelekcije();
     }
@@ -109,7 +110,7 @@
             opcija.value = game.naziv;
             selekcija.appendChild(opcija);
         });
-        selekcija = document.body.querySelector(".boardGameSelectList");
+        selekcija = this.container.querySelector(".boardGameSelectList");
         var length = selekcija.options.length - 1;
         for(let i = length; i >= 0; i--)
         {
@@ -138,11 +139,11 @@
 
         var sutniDole = document.createElement("div");
         sutniDole.classList.add("Sutnuto");
-        host.appendChild(sutniDole);
+        this.container.appendChild(sutniDole);
 
         var sveIgre = document.createElement("div");
         sveIgre.className="divSveIgre";
-        host.appendChild(sveIgre);
+        this.container.appendChild(sveIgre);
 
         this.crtajFormuIgre(sutniDole);
         this.crtajSveIgre(sveIgre);
@@ -165,6 +166,10 @@
         const formaTables = document.createElement("div");
         formaTables.classList.add("formaTables");
         host.appendChild(formaTables);
+
+        let elemenat = document.createElement("h2");
+        elemenat.innerHTML = this.naziv;
+        formaTables.appendChild(elemenat);
 
         //pocetak unosa
         var elLabel = document.createElement("h3");
